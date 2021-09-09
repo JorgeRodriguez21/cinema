@@ -17,17 +17,27 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")
+    implementation("org.postgresql:postgresql")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "junit")
         exclude(module = "mockito-core")
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("io.mockk:mockk:1.10.4")
+    testImplementation("com.ninja-squad:springmockk:2.0.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
 
 tasks.withType<KotlinCompile> {
