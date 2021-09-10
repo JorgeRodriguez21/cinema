@@ -1,4 +1,4 @@
-package com.example.cinema.components
+package com.example.cinema.component
 
 import com.example.cinema.dto.MovieRest
 import com.example.cinema.service.MovieRestService
