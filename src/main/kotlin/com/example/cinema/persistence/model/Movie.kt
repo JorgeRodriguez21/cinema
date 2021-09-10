@@ -7,12 +7,12 @@ import javax.persistence.*
 data class Movie(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
+    val id: Int?,
     val title: String,
-    @Column(name = "imdb_id")
+    @Column(name = "imdb_id", unique = true)
     val imdbId: String,
     @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
-    private val reviews: Set<Review>,
+    private val reviews: Set<Review> = setOf(),
     @OneToMany(mappedBy = "movie")
-    val moviesRooms :Set<MovieRoom>
+    val moviesRooms: Set<MovieRoom> = setOf()
 )
