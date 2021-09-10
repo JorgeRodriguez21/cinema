@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS movie (
     id serial NOT NULL,
     title varchar NOT NULL,
-    imdb_id INT NOT NULL,
+    imdb_id varchar NOT NULL,
     CONSTRAINT movie_pk PRIMARY KEY (id)
 );
 
@@ -42,17 +42,11 @@ CREATE TABLE IF NOT EXISTS review (
 
 CREATE TABLE IF NOT EXISTS reservation(
   id serial NOT NULL,
+  ticket_number INT NOT NULL,
   user_id INT NOT NULL,
   movie_id INT NOT NULL,
   room_id INT NOT NULL,
-  ticket_number INT NOT NULL,
-  user_id INT NULL,
   CONSTRAINT reservation_pk PRIMARY KEY (id),
   FOREIGN KEY (movie_id, room_id) REFERENCES movie_room(movie_id,room_id),
   FOREIGN KEY (user_id) REFERENCES "user"(id)
 );
-
-
-
-
-
