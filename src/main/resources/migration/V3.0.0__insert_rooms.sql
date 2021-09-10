@@ -1,0 +1,4 @@
+INSERT INTO room(type) VALUES ('NORMAL');
+INSERT INTO room(type) VALUES ('NORMAL_3D');
+INSERT INTO room(type) VALUES ('VIP');
+INSERT INTO room(type) VALUES ('VIP_3D');

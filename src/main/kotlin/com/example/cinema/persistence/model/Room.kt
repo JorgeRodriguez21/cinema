@@ -12,5 +12,5 @@ data class Room(
     @Enumerated(EnumType.STRING)
     val type: RoomType,
     @OneToMany(mappedBy = "room")
-    val moviesRooms: Set<MovieRoom>
+    val moviesRooms: Set<MovieRoom> = hashSetOf()
 )
