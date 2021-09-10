@@ -7,11 +7,11 @@ import javax.persistence.*
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
+    val id: Int?,
     val username: String,
     val password: String,
     @Enumerated(EnumType.STRING)
     val role: Role,
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private val reviews: Set<Review>
+    private val reviews: Set<Review> = hashSetOf()
 )
