@@ -37,4 +37,6 @@ data class Movie(
         result = 31 * result + imdbId.hashCode()
         return result
     }
+
+
 }

@@ -1,5 +1,7 @@
 package com.example.cinema.service
 
+import com.example.cinema.api.domain.DomainMovie
+import com.example.cinema.api.domain.DomainMovieShow
 import com.example.cinema.api.request.MovieShowRequest
 import com.example.cinema.persistence.model.*
 import com.example.cinema.persistence.repository.MovieRepository
@@ -60,8 +62,7 @@ internal class MovieServiceTest {
         every { movieRepository.findById(any()) }.returns(Optional.empty())
         val movieService = MovieService(roomRepository, movieRepository)
 
-        val exception =
-            assertThrows(NoSuchElementException::class.java) { movieService.saveShowTimes(movieShowRequest) }
+        assertThrows(NoSuchElementException::class.java) { movieService.saveShowTimes(movieShowRequest) }
     }
 
     @Test
@@ -83,5 +84,34 @@ internal class MovieServiceTest {
 
         verify(exactly = 1) { movieRepository.save(any()) }
         assertThat(expectedMovieToBeSaved).isEqualTo(slot.captured)
+    }
+
+    @Test
+    fun `should call repository to get all available movies`() {
+        val movieFromDatabase = Movie(1, "movie", "1234")
+        every { movieRepository.findAll() }.returns(listOf(movieFromDatabase))
+        val movieService = MovieService(roomRepository, movieRepository)
+
+        movieService.retrieveAllMoviesInformation()
+
+        verify(exactly = 1) { movieRepository.findAll() }
+    }
+
+    @Test
+    fun `should return a list of domain movies`() {
+        val movieFromDatabase = Movie(1, "movie", "1234")
+        val room = Room(1, RoomType.VIP_3D)
+        val room2 = Room(2, RoomType.NORMAL)
+        val movieRoom = MovieRoom(MovieRoomKey(1, 1), movieFromDatabase, room, BigDecimal.TEN, "15:30")
+        val movieRoom2 = MovieRoom(MovieRoomKey(1, 2), movieFromDatabase, room2, BigDecimal.ONE, "16:30")
+        movieFromDatabase.moviesRooms.add(movieRoom)
+        movieFromDatabase.moviesRooms.add(movieRoom2)
+        val expectedMovieDomain = DomainMovie.fromModel(movieFromDatabase)
+        every { movieRepository.findAll() }.returns(listOf(movieFromDatabase))
+        val movieService = MovieService(roomRepository, movieRepository)
+
+        val actualMovies = movieService.retrieveAllMoviesInformation()
+
+        assertThat(listOf(expectedMovieDomain)).usingRecursiveComparison().isEqualTo(actualMovies)
     }
 }

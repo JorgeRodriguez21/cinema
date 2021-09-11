@@ -11,7 +11,7 @@ data class Room(
     @Column(name = "\"type\"")
     @Enumerated(EnumType.STRING)
     val type: RoomType,
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     val moviesRooms: Set<MovieRoom> = hashSetOf()
 ) {
     override fun equals(other: Any?): Boolean {

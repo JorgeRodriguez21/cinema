@@ -34,4 +34,10 @@ data class MovieRoom(
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
+    override fun toString(): String {
+        return "MovieRoom(id=$id, price=$price, time='$time')"
+    }
+
+
 }
