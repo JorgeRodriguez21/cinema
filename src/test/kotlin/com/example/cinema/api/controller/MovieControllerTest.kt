@@ -39,7 +39,7 @@ internal class MovieControllerTest {
     lateinit var service: MovieService
 
     @Test
-    @WithMockUser(username = "user1", password = "pwd", roles = ["ADMIN"])
+    @WithMockUser(username = "user1", password = "pwd", authorities = ["ADMIN"])
     fun `should schedule a movie show with a price and a time for a given room`() {
         val request = MovieShowRequest(1, RoomType.NORMAL_3D, "15:30", BigDecimal.TEN)
         justRun { service.saveShowTimes(request) }
@@ -53,7 +53,7 @@ internal class MovieControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user1", password = "pwd", roles = ["USER"])
+    @WithMockUser(username = "user1", password = "pwd", authorities = ["USER"])
     fun `should return 401 when the user has not the allowed role`() {
         val request = MovieShowRequest(1, RoomType.NORMAL_3D, "15:30", BigDecimal.TEN)
         justRun { service.saveShowTimes(request) }
@@ -63,7 +63,7 @@ internal class MovieControllerTest {
                 .content(objectMapper.writeValueAsString(request))
         )
 
-        perform.andExpect(MockMvcResultMatchers.status().`is`(201))
+        perform.andExpect(MockMvcResultMatchers.status().`is`(401))
     }
 
 }
