@@ -1,6 +1,7 @@
 package com.example.cinema.service
 
 import com.example.cinema.api.domain.DomainMovie
+import com.example.cinema.api.request.MovieShowDeleteRequest
 import com.example.cinema.api.request.MovieShowRequest
 import com.example.cinema.persistence.model.*
 import com.example.cinema.persistence.repository.MovieRepository
@@ -123,5 +124,18 @@ internal class MovieServiceTest {
         val actualMovies = movieService.retrieveAllMoviesInformation()
 
         assertThat(listOf(expectedMovieDomain)).usingRecursiveComparison().isEqualTo(actualMovies)
+    }
+
+    @Test
+    fun `should call repository to delete a movie room by id`() {
+        val movieShowDeleteRequest = MovieShowDeleteRequest(1, 1)
+        val movieRoomKey = MovieRoomKey(1, 1)
+        justRun { movieRoomRepository.deleteById(movieRoomKey) }
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
+
+        movieService.deleteMovieShow(movieShowDeleteRequest)
+
+        verify(exactly = 1) { movieRoomRepository.deleteById(movieRoomKey) }
+
     }
 }

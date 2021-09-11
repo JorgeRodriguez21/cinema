@@ -38,6 +38,4 @@ data class MovieRoom(
     override fun toString(): String {
         return "MovieRoom(id=$id, price=$price, time='$time')"
     }
-
-
 }

@@ -1,6 +1,7 @@
 package com.example.cinema.service
 
 import com.example.cinema.api.domain.DomainMovie
+import com.example.cinema.api.request.MovieShowDeleteRequest
 import com.example.cinema.api.request.MovieShowRequest
 import com.example.cinema.persistence.model.Movie
 import com.example.cinema.persistence.model.MovieRoom
@@ -39,5 +40,10 @@ class MovieService @Autowired constructor(
     fun retrieveAllMoviesInformation(): List<DomainMovie> {
         val movies = movieRepository.findAll()
         return movies.map(DomainMovie::fromModel)
+    }
+
+    fun deleteMovieShow(movieShowDeleteRequest: MovieShowDeleteRequest) {
+        val movieRoomKey = MovieRoomKey(movieShowDeleteRequest.movieId, movieShowDeleteRequest.roomId)
+        movieRoomRepository.deleteById(movieRoomKey)
     }
 }
