@@ -7,7 +7,7 @@ import javax.persistence.*
 data class Reservation(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
+    val id: Int?,
     @Column(name = "ticket_number")
     val ticketNumber: Int,
     @ManyToOne()
