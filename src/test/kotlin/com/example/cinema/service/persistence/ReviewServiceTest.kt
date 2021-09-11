@@ -69,7 +69,6 @@ internal class ReviewServiceTest {
     @Test
     fun `should throw when user is not found`() {
         val movieRequest = MovieReviewRequest(1, "comment", 2, "username")
-        val user = User(1, "", "", Role.USER)
         val movie = buildMovie()
         every { movieRepository.findById(any()) } returns (Optional.of(movie))
         every { userRepository.findByUsername(any()) } returns null

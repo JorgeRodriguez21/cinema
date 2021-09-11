@@ -2,7 +2,6 @@ package com.example.cinema.service.persistence
 
 import com.example.cinema.api.request.MovieReviewRequest
 import com.example.cinema.persistence.model.Review
-import com.example.cinema.persistence.model.User
 import com.example.cinema.persistence.repository.MovieRepository
 import com.example.cinema.persistence.repository.ReviewRepository
 import com.example.cinema.persistence.repository.UserRepository
