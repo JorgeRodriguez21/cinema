@@ -9,7 +9,7 @@ data class Review(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
-    val rate: BigDecimal,
+    val rate: Int,
     val comment: String,
     @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
