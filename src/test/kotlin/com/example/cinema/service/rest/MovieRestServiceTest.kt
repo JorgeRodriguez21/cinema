@@ -23,7 +23,6 @@ internal class MovieRestServiceTest() {
 
     private val testScope = TestCoroutineScope()
     private val restTemplate: RestTemplate = mockk()
-    private val movieRepository: MovieRepository = mockk()
 
     @AfterEach
     fun cleanUp() {
@@ -44,7 +43,7 @@ internal class MovieRestServiceTest() {
                     MovieRestDto::class.java
                 )
             }.returns(movieRestDto)
-            val movieRestService = MovieRestService(restTemplate, movieRepository)
+            val movieRestService = MovieRestService(restTemplate)
 
             val actualMovie = movieRestService.getMovieByIdAsync(id)
 
@@ -66,7 +65,7 @@ internal class MovieRestServiceTest() {
                     MovieRestDto::class.java
                 )
             }.returns(null)
-            val movieRestService = MovieRestService(restTemplate, movieRepository)
+            val movieRestService = MovieRestService(restTemplate)
 
             val actualMovie = movieRestService.getMovieByIdAsync(id)
 
@@ -88,7 +87,7 @@ internal class MovieRestServiceTest() {
                 MovieRestDto::class.java
             )
         }.returns(movieRestDto)
-        val movieRestService = MovieRestService(restTemplate, movieRepository)
+        val movieRestService = MovieRestService(restTemplate)
 
         val actualMovie = movieRestService.getMovieById(id)
 
@@ -108,7 +107,7 @@ internal class MovieRestServiceTest() {
                 MovieRestDto::class.java
             )
         }.returns(null)
-        val movieRestService = MovieRestService(restTemplate, movieRepository)
+        val movieRestService = MovieRestService(restTemplate)
 
         val actualMovie = movieRestService.getMovieById(id)
 
@@ -120,7 +119,7 @@ internal class MovieRestServiceTest() {
     fun `should load the list of movies from an external service`() = testScope.runBlockingTest {
         val movieRestDto = MovieRestDto("", "", "", "", 0.0, "", listOf())
         every { restTemplate.getForObject(any<String>(), MovieRestDto::class.java) }.returns(movieRestDto)
-        val movieRestService = MovieRestService(restTemplate, movieRepository)
+        val movieRestService = MovieRestService(restTemplate)
 
         val actualMovies = movieRestService.loadMovies()
 
@@ -136,7 +135,7 @@ internal class MovieRestServiceTest() {
         val url =
             "https://www.omdbapi.com/?apikey=${MovieRestService.Companion.API_KEY}&i=${notFoundId}"
         every { restTemplate.getForObject(url, MovieRestDto::class.java) }.returns(null)
-        val movieRestService = MovieRestService(restTemplate, movieRepository)
+        val movieRestService = MovieRestService(restTemplate)
 
         val actualMovies = movieRestService.loadMovies()
 

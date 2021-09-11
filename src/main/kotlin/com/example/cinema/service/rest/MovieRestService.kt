@@ -1,7 +1,6 @@
 package com.example.cinema.service.rest
 
 import com.example.cinema.api.dto.MovieRestDto
-import com.example.cinema.persistence.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -11,8 +10,7 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class MovieRestService @Autowired constructor(
-    private val restTemplate: RestTemplate,
-    private val movieRepository: MovieRepository
+    private val restTemplate: RestTemplate
 ) {
     companion object {
         const val API_KEY = ""
