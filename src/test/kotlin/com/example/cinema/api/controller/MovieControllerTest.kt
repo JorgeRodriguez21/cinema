@@ -2,6 +2,7 @@ package com.example.cinema.api.controller
 
 import com.example.cinema.CinemaApplication
 import com.example.cinema.api.domain.DomainMovie
+import com.example.cinema.api.request.MovieShowDeleteRequest
 import com.example.cinema.api.request.MovieShowRequest
 import com.example.cinema.api.response.MovieResponse
 import com.example.cinema.persistence.model.RoomType
@@ -91,6 +92,33 @@ internal class MovieControllerTest {
 
         val perform: ResultActions = mockMvc.perform(
             MockMvcRequestBuilders.get("/movie/show")
+        )
+
+        perform.andExpect(MockMvcResultMatchers.status().isUnauthorized)
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "pwd", authorities = ["ADMIN"])
+    fun `should delete a movie show`() {
+        val request = MovieShowDeleteRequest(1, 1)
+        justRun { service.deleteMovieShow(request) }
+
+        val perform: ResultActions = mockMvc.perform(
+            MockMvcRequestBuilders.delete("/movie/show").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+        )
+
+        perform.andExpect(MockMvcResultMatchers.status().isNoContent)
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "pwd", authorities = ["USER"])
+    fun `should return 401 when the user has not the allowed role for delete movies show`() {
+
+        val request = MovieShowDeleteRequest(1, 1)
+        val perform: ResultActions = mockMvc.perform(
+            MockMvcRequestBuilders.delete("/movie/show").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
         )
 
         perform.andExpect(MockMvcResultMatchers.status().isUnauthorized)
