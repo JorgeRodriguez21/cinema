@@ -117,7 +117,7 @@ internal class MovieRestServiceTest() {
         every { restTemplate.getForObject(any<String>(), MovieRest::class.java) }.returns(movieRest)
         val movieRestService = MovieRestService(restTemplate)
 
-        val actualMovies = movieRestService.loadOrders()
+        val actualMovies = movieRestService.loadMovies()
 
         verify(exactly = 8) { restTemplate.getForObject(any<String>(), MovieRest::class.java) }
         assertThat(actualMovies.size).isEqualTo(8)
@@ -133,7 +133,7 @@ internal class MovieRestServiceTest() {
         every { restTemplate.getForObject(url, MovieRest::class.java) }.returns(null)
         val movieRestService = MovieRestService(restTemplate)
 
-        val actualMovies = movieRestService.loadOrders()
+        val actualMovies = movieRestService.loadMovies()
 
         verify(exactly = 8) { restTemplate.getForObject(any<String>(), MovieRest::class.java) }
         assertThat(actualMovies.size).isEqualTo(7)

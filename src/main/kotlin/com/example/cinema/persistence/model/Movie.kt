@@ -1,6 +1,5 @@
 package com.example.cinema.persistence.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
@@ -14,7 +13,7 @@ data class Movie(
     val imdbId: String,
     @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
     private val reviews: Set<Review> = setOf(),
-    @OneToMany(mappedBy = "movie", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "movie", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val moviesRooms: MutableSet<MovieRoom> = mutableSetOf()
 
 

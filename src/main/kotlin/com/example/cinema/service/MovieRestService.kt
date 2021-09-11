@@ -28,7 +28,7 @@ class MovieRestService @Autowired constructor(
         }
     }
 
-    fun loadOrders(): List<MovieRest> {
+    fun loadMovies(): List<MovieRest> {
         val obtainedMovies = mutableListOf<MovieRest>()
         val movieIds = listOf(
             "tt0232500",

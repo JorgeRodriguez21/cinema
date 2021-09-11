@@ -22,7 +22,7 @@ class InitialRunner @Autowired constructor(
     override fun run(vararg args: String?) {
         createUser("user", Role.USER)
         createUser("admin", Role.ADMIN)
-        movieRestService.loadOrders().forEach(::saveMovieToDatabase)
+        movieRestService.loadMovies().forEach(::saveMovieToDatabase)
     }
 
     private fun saveMovieToDatabase(movieRest: MovieRest) {
