@@ -1,10 +1,10 @@
 package com.example.cinema.service
 
 import com.example.cinema.api.domain.DomainMovie
-import com.example.cinema.api.domain.DomainMovieShow
 import com.example.cinema.api.request.MovieShowRequest
 import com.example.cinema.persistence.model.*
 import com.example.cinema.persistence.repository.MovieRepository
+import com.example.cinema.persistence.repository.MovieRoomRepository
 import com.example.cinema.persistence.repository.RoomRepository
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
@@ -18,6 +18,7 @@ internal class MovieServiceTest {
 
     private val roomRepository: RoomRepository = mockk()
     private val movieRepository: MovieRepository = mockk()
+    private val movieRoomRepository: MovieRoomRepository = mockk()
 
     @BeforeEach
     fun setup() {
@@ -27,12 +28,16 @@ internal class MovieServiceTest {
     @Test
     fun `should call repository to get the room`() {
         val movieShowRequest = MovieShowRequest(1, RoomType.NORMAL_3D, "3:30", BigDecimal.TEN)
-        val room = Room(1, RoomType.NORMAL_3D)
-        every { roomRepository.findByType(any()) }.returns(room)
+        val roomFromDatabase = Room(1, RoomType.NORMAL_3D)
+        every { roomRepository.findByType(any()) }.returns(roomFromDatabase)
         val movieFromDatabase = Movie(1, "movie", "1234")
         every { movieRepository.findById(any()) }.returns(Optional.of(movieFromDatabase))
-        val movieService = MovieService(roomRepository, movieRepository)
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
         every { movieRepository.save(any()) }.returns(movieFromDatabase)
+        val movieRoomKey = MovieRoomKey(1, 1)
+        val movieRoom =
+            MovieRoom(movieRoomKey, movieFromDatabase, roomFromDatabase, movieShowRequest.price, movieShowRequest.time)
+        every { movieRoomRepository.save(any()) }.returns(movieRoom)
 
         movieService.saveShowTimes(movieShowRequest)
 
@@ -42,12 +47,16 @@ internal class MovieServiceTest {
     @Test
     fun `should call the repository to find the movie`() {
         val movieShowRequest = MovieShowRequest(1, RoomType.NORMAL_3D, "3:30", BigDecimal.TEN)
-        val room = Room(1, RoomType.NORMAL_3D)
-        every { roomRepository.findByType(any()) }.returns(room)
+        val roomFromDatabase = Room(1, RoomType.NORMAL_3D)
+        every { roomRepository.findByType(any()) }.returns(roomFromDatabase)
         val movieFromDatabase = Movie(1, "movie", "1234")
         every { movieRepository.findById(any()) }.returns(Optional.of(movieFromDatabase))
-        val movieService = MovieService(roomRepository, movieRepository)
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
         every { movieRepository.save(any()) }.returns(movieFromDatabase)
+        val movieRoomKey = MovieRoomKey(1, 1)
+        val movieRoom =
+            MovieRoom(movieRoomKey, movieFromDatabase, roomFromDatabase, movieShowRequest.price, movieShowRequest.time)
+        every { movieRoomRepository.save(any()) }.returns(movieRoom)
 
         movieService.saveShowTimes(movieShowRequest)
 
@@ -60,7 +69,7 @@ internal class MovieServiceTest {
         val room = Room(1, RoomType.NORMAL_3D)
         every { roomRepository.findByType(any()) }.returns(room)
         every { movieRepository.findById(any()) }.returns(Optional.empty())
-        val movieService = MovieService(roomRepository, movieRepository)
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
 
         assertThrows(NoSuchElementException::class.java) { movieService.saveShowTimes(movieShowRequest) }
     }
@@ -78,7 +87,8 @@ internal class MovieServiceTest {
         val slot = slot<Movie>()
         val expectedMovieToBeSaved = Movie(1, "movie", "1234", moviesRooms = hashSetOf(movieRoom))
         every { movieRepository.save(capture(slot)) }.returns(Movie(1, "movie", "1234"))
-        val movieService = MovieService(roomRepository, movieRepository)
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
+        every { movieRoomRepository.save(movieRoom) }.returns(movieRoom)
 
         movieService.saveShowTimes(movieShowRequest)
 
@@ -90,7 +100,7 @@ internal class MovieServiceTest {
     fun `should call repository to get all available movies`() {
         val movieFromDatabase = Movie(1, "movie", "1234")
         every { movieRepository.findAll() }.returns(listOf(movieFromDatabase))
-        val movieService = MovieService(roomRepository, movieRepository)
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
 
         movieService.retrieveAllMoviesInformation()
 
@@ -108,7 +118,7 @@ internal class MovieServiceTest {
         movieFromDatabase.moviesRooms.add(movieRoom2)
         val expectedMovieDomain = DomainMovie.fromModel(movieFromDatabase)
         every { movieRepository.findAll() }.returns(listOf(movieFromDatabase))
-        val movieService = MovieService(roomRepository, movieRepository)
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
 
         val actualMovies = movieService.retrieveAllMoviesInformation()
 
