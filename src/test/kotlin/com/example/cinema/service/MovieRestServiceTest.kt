@@ -151,6 +151,15 @@ internal class MovieRestServiceTest() {
         val movie = buildMovie()
         every { movieRepository.findById(id) }.returns(Optional.of(movie))
         val movieRestService = MovieRestService(restTemplate, movieRepository)
+        val movieRestDto = MovieRestDto("", "", "", "", 0.0, "", listOf())
+        val url =
+            "https://www.omdbapi.com/?apikey=${com.example.cinema.service.MovieRestService.Companion.API_KEY}&i=${movie.imdbId}"
+        every {
+            restTemplate.getForObject(
+                url,
+                MovieRestDto::class.java
+            )
+        }.returns(movieRestDto)
 
         movieRestService.getMovieDetails(id)
 
