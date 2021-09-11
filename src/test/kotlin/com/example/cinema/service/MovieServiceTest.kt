@@ -1,6 +1,6 @@
 package com.example.cinema.service
 
-import com.example.cinema.api.domain.DomainMovie
+import com.example.cinema.api.dto.MovieDto
 import com.example.cinema.api.request.MovieShowDeleteRequest
 import com.example.cinema.api.request.MovieShowRequest
 import com.example.cinema.persistence.model.*
@@ -109,7 +109,7 @@ internal class MovieServiceTest {
     }
 
     @Test
-    fun `should return a list of domain movies`() {
+    fun `should return a list of movie DTOs`() {
         val movieFromDatabase = Movie(1, "movie", "1234")
         val room = Room(1, RoomType.VIP_3D)
         val room2 = Room(2, RoomType.NORMAL)
@@ -117,13 +117,13 @@ internal class MovieServiceTest {
         val movieRoom2 = MovieRoom(MovieRoomKey(1, 2), movieFromDatabase, room2, BigDecimal.ONE, "16:30")
         movieFromDatabase.moviesRooms.add(movieRoom)
         movieFromDatabase.moviesRooms.add(movieRoom2)
-        val expectedMovieDomain = DomainMovie.fromModel(movieFromDatabase)
+        val expectedMovieDto = MovieDto.fromModel(movieFromDatabase)
         every { movieRepository.findAll() }.returns(listOf(movieFromDatabase))
         val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
 
         val actualMovies = movieService.retrieveAllMoviesInformation()
 
-        assertThat(listOf(expectedMovieDomain)).usingRecursiveComparison().isEqualTo(actualMovies)
+        assertThat(listOf(expectedMovieDto)).usingRecursiveComparison().isEqualTo(actualMovies)
     }
 
     @Test

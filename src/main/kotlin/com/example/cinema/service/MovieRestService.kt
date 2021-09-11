@@ -1,6 +1,6 @@
 package com.example.cinema.service
 
-import com.example.cinema.dto.MovieRest
+import com.example.cinema.api.dto.MovieRest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext

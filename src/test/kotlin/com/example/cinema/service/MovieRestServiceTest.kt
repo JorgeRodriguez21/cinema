@@ -1,6 +1,6 @@
 package com.example.cinema.service
 
-import com.example.cinema.dto.MovieRest
+import com.example.cinema.api.dto.MovieRest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -137,5 +137,10 @@ internal class MovieRestServiceTest() {
 
         verify(exactly = 8) { restTemplate.getForObject(any<String>(), MovieRest::class.java) }
         assertThat(actualMovies.size).isEqualTo(7)
+    }
+
+    @Test
+    fun `should call the repository to get a movie by id`() {
+
     }
 }

@@ -1,9 +1,7 @@
-package com.example.cinema.dto
+package com.example.cinema.api.dto
 
 import com.fasterxml.jackson.annotation.JsonAlias
-import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import java.util.*
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class MovieRest(
@@ -13,8 +11,9 @@ data class MovieRest(
     @JsonAlias("Released") val releaseDate: String,
     @JsonAlias("imdbRating") val imdbRating: Double,
     @JsonAlias("Runtime") val runtime: String = "",
-    @JsonAlias("Ratings") val ratings: List<MovieRestRating>
+    @JsonAlias("Ratings") val ratings: List<MovieRestRatingDto>,
+    var reviewsOnCinema: Double = 0.0
 )
 
 @JsonIgnoreProperties(ignoreUnknown = false)
-data class MovieRestRating(@JsonAlias("Source") val source: String = "", @JsonAlias("Value") val value: String = "")
+data class MovieRestRatingDto(@JsonAlias("Source") val source: String = "", @JsonAlias("Value") val value: String = "")

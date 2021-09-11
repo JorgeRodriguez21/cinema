@@ -1,7 +1,7 @@
 package com.example.cinema.api.controller
 
 import com.example.cinema.CinemaApplication
-import com.example.cinema.api.domain.DomainMovie
+import com.example.cinema.api.dto.MovieDto
 import com.example.cinema.api.request.MovieShowDeleteRequest
 import com.example.cinema.api.request.MovieShowRequest
 import com.example.cinema.api.response.MovieResponse
@@ -73,7 +73,7 @@ internal class MovieControllerTest {
     @Test
     @WithMockUser(username = "user1", password = "pwd", authorities = ["ADMIN"])
     fun `should return all the existent movies with the associated shows`() {
-        val movie: DomainMovie = DomainMovie.fromModel(buildMovie())
+        val movie: MovieDto = MovieDto.fromModel(buildMovie())
         val expectedResponse = MovieResponse(listOf(movie))
         every { service.retrieveAllMoviesInformation() }.returns(listOf(movie))
 

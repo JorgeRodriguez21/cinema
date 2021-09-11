@@ -1,6 +1,6 @@
 package com.example.cinema.component
 
-import com.example.cinema.dto.MovieRest
+import com.example.cinema.api.dto.MovieRest
 import com.example.cinema.persistence.model.Movie
 import com.example.cinema.persistence.model.Role
 import com.example.cinema.persistence.model.User
