@@ -1,6 +1,6 @@
 package com.example.cinema.component
 
-import com.example.cinema.api.dto.MovieRest
+import com.example.cinema.api.dto.MovieRestDto
 import com.example.cinema.persistence.model.Movie
 import com.example.cinema.persistence.model.Role
 import com.example.cinema.persistence.model.User
@@ -25,10 +25,10 @@ class InitialRunner @Autowired constructor(
         movieRestService.loadMovies().forEach(::saveMovieToDatabase)
     }
 
-    private fun saveMovieToDatabase(movieRest: MovieRest) {
-        val foundMovie = movieRepository.findByImdbId(movieRest.id)
+    private fun saveMovieToDatabase(movieRestDto: MovieRestDto) {
+        val foundMovie = movieRepository.findByImdbId(movieRestDto.id)
         if (foundMovie == null) {
-            movieRepository.save(Movie(null, movieRest.title, movieRest.id))
+            movieRepository.save(Movie(null, movieRestDto.title, movieRestDto.id))
         }
     }
 

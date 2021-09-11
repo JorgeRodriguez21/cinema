@@ -1,6 +1,6 @@
 package com.example.cinema.service
 
-import com.example.cinema.api.dto.MovieRest
+import com.example.cinema.api.dto.MovieRestDto
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.web.client.RestTemplate
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class MovieRestServiceTest() {
+internal class MovieRestDtoServiceTest() {
 
 
     private val testScope = TestCoroutineScope()
@@ -28,7 +28,7 @@ internal class MovieRestServiceTest() {
     @Test
     fun `should call an external service with the right url to get a movie with an async call`() {
         runBlocking {
-            val movieRest = MovieRest("", "", "", "", 0.0, "", listOf())
+            val movieRestDto = MovieRestDto("", "", "", "", 0.0, "", listOf())
             val id = "123"
             val url =
                 "https://www.omdbapi.com/?apikey=${com.example.cinema.service.MovieRestService.Companion.API_KEY}&i=${id}"
@@ -36,14 +36,14 @@ internal class MovieRestServiceTest() {
 
                 restTemplate.getForObject(
                     url,
-                    MovieRest::class.java
+                    MovieRestDto::class.java
                 )
-            }.returns(movieRest)
+            }.returns(movieRestDto)
             val movieRestService = MovieRestService(restTemplate)
 
             val actualMovie = movieRestService.getMovieByIdAsync(id)
 
-            verify(exactly = 1) { restTemplate.getForObject(url, MovieRest::class.java) }
+            verify(exactly = 1) { restTemplate.getForObject(url, MovieRestDto::class.java) }
             assertThat(actualMovie).isNotNull
         }
     }
@@ -58,21 +58,21 @@ internal class MovieRestServiceTest() {
 
                 restTemplate.getForObject(
                     url,
-                    MovieRest::class.java
+                    MovieRestDto::class.java
                 )
             }.returns(null)
             val movieRestService = MovieRestService(restTemplate)
 
             val actualMovie = movieRestService.getMovieByIdAsync(id)
 
-            verify(exactly = 1) { restTemplate.getForObject(url, MovieRest::class.java) }
+            verify(exactly = 1) { restTemplate.getForObject(url, MovieRestDto::class.java) }
             assertThat(actualMovie).isNull()
         }
     }
 
     @Test
     fun `should call an external service with the right url to get a movie`() {
-        val movieRest = MovieRest("", "", "", "", 0.0, "", listOf())
+        val movieRestDto = MovieRestDto("", "", "", "", 0.0, "", listOf())
         val id = "123"
         val url =
             "https://www.omdbapi.com/?apikey=${com.example.cinema.service.MovieRestService.Companion.API_KEY}&i=${id}"
@@ -80,14 +80,14 @@ internal class MovieRestServiceTest() {
 
             restTemplate.getForObject(
                 url,
-                MovieRest::class.java
+                MovieRestDto::class.java
             )
-        }.returns(movieRest)
+        }.returns(movieRestDto)
         val movieRestService = MovieRestService(restTemplate)
 
         val actualMovie = movieRestService.getMovieById(id)
 
-        verify(exactly = 1) { restTemplate.getForObject(url, MovieRest::class.java) }
+        verify(exactly = 1) { restTemplate.getForObject(url, MovieRestDto::class.java) }
         assertThat(actualMovie).isNotNull
     }
 
@@ -100,42 +100,42 @@ internal class MovieRestServiceTest() {
 
             restTemplate.getForObject(
                 url,
-                MovieRest::class.java
+                MovieRestDto::class.java
             )
         }.returns(null)
         val movieRestService = MovieRestService(restTemplate)
 
         val actualMovie = movieRestService.getMovieById(id)
 
-        verify(exactly = 1) { restTemplate.getForObject(url, MovieRest::class.java) }
+        verify(exactly = 1) { restTemplate.getForObject(url, MovieRestDto::class.java) }
         assertThat(actualMovie).isNull()
     }
 
     @Test
     fun `should load the list of movies from an external service`() = testScope.runBlockingTest {
-        val movieRest = MovieRest("", "", "", "", 0.0, "", listOf())
-        every { restTemplate.getForObject(any<String>(), MovieRest::class.java) }.returns(movieRest)
+        val movieRestDto = MovieRestDto("", "", "", "", 0.0, "", listOf())
+        every { restTemplate.getForObject(any<String>(), MovieRestDto::class.java) }.returns(movieRestDto)
         val movieRestService = MovieRestService(restTemplate)
 
         val actualMovies = movieRestService.loadMovies()
 
-        verify(exactly = 8) { restTemplate.getForObject(any<String>(), MovieRest::class.java) }
+        verify(exactly = 8) { restTemplate.getForObject(any<String>(), MovieRestDto::class.java) }
         assertThat(actualMovies.size).isEqualTo(8)
     }
 
     @Test
     fun `should load the list of movies from an external service avoiding nulls`() = testScope.runBlockingTest {
-        val movieRest = MovieRest("", "", "", "", 0.0, "", listOf())
-        every { restTemplate.getForObject(any<String>(), MovieRest::class.java) }.returns(movieRest)
+        val movieRestDto = MovieRestDto("", "", "", "", 0.0, "", listOf())
+        every { restTemplate.getForObject(any<String>(), MovieRestDto::class.java) }.returns(movieRestDto)
         val notFoundId = "tt0463985";
         val url =
             "https://www.omdbapi.com/?apikey=${com.example.cinema.service.MovieRestService.Companion.API_KEY}&i=${notFoundId}"
-        every { restTemplate.getForObject(url, MovieRest::class.java) }.returns(null)
+        every { restTemplate.getForObject(url, MovieRestDto::class.java) }.returns(null)
         val movieRestService = MovieRestService(restTemplate)
 
         val actualMovies = movieRestService.loadMovies()
 
-        verify(exactly = 8) { restTemplate.getForObject(any<String>(), MovieRest::class.java) }
+        verify(exactly = 8) { restTemplate.getForObject(any<String>(), MovieRestDto::class.java) }
         assertThat(actualMovies.size).isEqualTo(7)
     }
 

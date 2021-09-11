@@ -1,6 +1,6 @@
 package com.example.cinema.service
 
-import com.example.cinema.api.dto.MovieRest
+import com.example.cinema.api.dto.MovieRestDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -18,18 +18,18 @@ class MovieRestService @Autowired constructor(
 
     private val baseUrl = "https://www.omdbapi.com/?apikey=${API_KEY}&i="
 
-    fun getMovieById(id: String): MovieRest? {
-        return restTemplate.getForObject("$baseUrl${id}", MovieRest::class.java)
+    fun getMovieById(id: String): MovieRestDto? {
+        return restTemplate.getForObject("$baseUrl${id}", MovieRestDto::class.java)
     }
 
-    suspend fun getMovieByIdAsync(id: String): MovieRest? {
+    suspend fun getMovieByIdAsync(id: String): MovieRestDto? {
         return withContext(Dispatchers.IO) {
-            restTemplate.getForObject("$baseUrl${id}", MovieRest::class.java)
+            restTemplate.getForObject("$baseUrl${id}", MovieRestDto::class.java)
         }
     }
 
-    fun loadMovies(): List<MovieRest> {
-        val obtainedMovies = mutableListOf<MovieRest>()
+    fun loadMovies(): List<MovieRestDto> {
+        val obtainedMovies = mutableListOf<MovieRestDto>()
         val movieIds = listOf(
             "tt0232500",
             "tt0322259",

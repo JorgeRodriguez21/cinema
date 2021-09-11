@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class MovieRest(
+data class MovieRestDto(
     @JsonAlias("imdbID") val id: String = "",
     @JsonAlias("Title") val title: String = "",
     @JsonAlias("Plot") val description: String = "",
