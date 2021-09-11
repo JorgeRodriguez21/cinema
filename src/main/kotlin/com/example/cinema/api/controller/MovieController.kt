@@ -29,13 +29,7 @@ class MovieController @Autowired constructor(private val service: MovieService) 
     @GetMapping("/show")
     @ResponseStatus(HttpStatus.OK)
     fun getMoviesInformation(): MovieResponse {
-        if (isAdmin()) {
-            return MovieResponse(service.retrieveAllMoviesInformation())
-        } else {
-            throw ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Invalid user"
-            )
-        }
+        return MovieResponse(service.retrieveAllMoviesInformation())
     }
 
     @DeleteMapping("/show")

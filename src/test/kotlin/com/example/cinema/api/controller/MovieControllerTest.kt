@@ -87,17 +87,6 @@ internal class MovieControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user1", password = "pwd", authorities = ["USER"])
-    fun `should return 401 when the user has not the allowed role for getting movies shows`() {
-
-        val perform: ResultActions = mockMvc.perform(
-            MockMvcRequestBuilders.get("/movie/show")
-        )
-
-        perform.andExpect(MockMvcResultMatchers.status().isUnauthorized)
-    }
-
-    @Test
     @WithMockUser(username = "user1", password = "pwd", authorities = ["ADMIN"])
     fun `should delete a movie show`() {
         val request = MovieShowDeleteRequest(1, 1)
