@@ -12,7 +12,7 @@ data class Movie(
     @Column(name = "imdb_id", unique = true)
     val imdbId: String,
     @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
-    private val reviews: Set<Review> = setOf(),
+    var reviews: Set<Review> = setOf(),
     @OneToMany(mappedBy = "movie", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val moviesRooms: MutableSet<MovieRoom> = mutableSetOf()
 

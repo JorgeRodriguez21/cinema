@@ -1,6 +1,7 @@
 package com.example.cinema.service
 
 import com.example.cinema.api.dto.MovieRestDto
+import com.example.cinema.persistence.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -10,7 +11,8 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class MovieRestService @Autowired constructor(
-    private val restTemplate: RestTemplate
+    private val restTemplate: RestTemplate,
+    private val movieRepository: MovieRepository
 ) {
     companion object {
         const val API_KEY = ""
@@ -47,5 +49,13 @@ class MovieRestService @Autowired constructor(
             }
         }
         return obtainedMovies;
+    }
+
+    fun getMovieDetails(id: Int): MovieRestDto {
+        val movie = movieRepository.findById(id).orElseThrow()
+        val movieRestDto = this.getMovieById(movie.imdbId) ?: throw NoSuchElementException()
+        movieRestDto.setComments(movie.reviews.toList())
+        movieRestDto.calculateReviewRate(movie.reviews.toList())
+        return movieRestDto
     }
 }
