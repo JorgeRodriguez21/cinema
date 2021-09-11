@@ -1,12 +1,16 @@
 package com.example.cinema.api.controller
 
 import com.example.cinema.CinemaApplication
+import com.example.cinema.api.domain.DomainMovie
 import com.example.cinema.api.request.MovieShowRequest
+import com.example.cinema.api.response.MovieResponse
 import com.example.cinema.persistence.model.RoomType
 import com.example.cinema.security.SpringSecurityConfig
 import com.example.cinema.service.MovieService
+import com.example.cinema.utils.TestMovieBuilder.buildMovie
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import io.mockk.justRun
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -56,7 +60,6 @@ internal class MovieControllerTest {
     @WithMockUser(username = "user1", password = "pwd", authorities = ["USER"])
     fun `should return 401 when the user has not the allowed role`() {
         val request = MovieShowRequest(1, RoomType.NORMAL_3D, "15:30", BigDecimal.TEN)
-        justRun { service.saveShowTimes(request) }
 
         val perform: ResultActions = mockMvc.perform(
             MockMvcRequestBuilders.post("/movie/show").contentType(MediaType.APPLICATION_JSON)
@@ -66,4 +69,30 @@ internal class MovieControllerTest {
         perform.andExpect(MockMvcResultMatchers.status().`is`(401))
     }
 
+    @Test
+    @WithMockUser(username = "user1", password = "pwd", authorities = ["ADMIN"])
+    fun `should return all the existent movies with the associated shows`() {
+        val movie: DomainMovie = DomainMovie.fromModel(buildMovie())
+        val expectedResponse = MovieResponse(listOf(movie))
+        every { service.retrieveAllMoviesInformation() }.returns(listOf(movie))
+
+        val perform: ResultActions = mockMvc.perform(
+            MockMvcRequestBuilders.get("/movie/show")
+        )
+
+        perform.andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.content().string(objectMapper.writeValueAsString(expectedResponse)))
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "pwd", authorities = ["USER"])
+    fun `should return 401 when the user has not the allowed role for getting movies shows`() {
+
+        val perform: ResultActions = mockMvc.perform(
+            MockMvcRequestBuilders.get("/movie/show")
+        )
+
+        perform.andExpect(MockMvcResultMatchers.status().isUnauthorized)
+    }
 }

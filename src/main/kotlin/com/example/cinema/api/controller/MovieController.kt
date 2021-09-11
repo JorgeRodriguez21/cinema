@@ -1,6 +1,7 @@
 package com.example.cinema.api.controller
 
 import com.example.cinema.api.request.MovieShowRequest
+import com.example.cinema.api.response.MovieResponse
 import com.example.cinema.service.MovieService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -15,13 +16,29 @@ class MovieController @Autowired constructor(private val service: MovieService) 
     @PostMapping("/show")
     @ResponseStatus(HttpStatus.CREATED)
     fun createShowMovieTime(@RequestBody request: MovieShowRequest) {
-        val auth = SecurityContextHolder.getContext().authentication;
-        if (auth != null && auth.authorities.any { it.authority.equals("ADMIN") }) {
+        if (isAdmin()) {
             service.saveShowTimes(request)
         } else {
             throw ResponseStatusException(
                 HttpStatus.UNAUTHORIZED, "Invalid user"
             )
         }
+    }
+
+    @GetMapping("/show")
+    @ResponseStatus(HttpStatus.OK)
+    fun getMoviesInformation(): MovieResponse {
+        if (isAdmin()) {
+            return MovieResponse(service.retrieveAllMoviesInformation())
+        } else {
+            throw ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Invalid user"
+            )
+        }
+    }
+
+    private fun isAdmin(): Boolean {
+        val auth = SecurityContextHolder.getContext().authentication
+        return auth != null && auth.authorities.any { it.authority.equals("ADMIN") }
     }
 }
