@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.web.client.RestTemplate
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class MovieRestDtoServiceTest() {
+internal class MovieRestServiceTest() {
 
 
     private val testScope = TestCoroutineScope()
