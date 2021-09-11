@@ -14,6 +14,7 @@
 
 1. Java 11
 2. Docker installed and running
+3. Internet connection
 
 ### Running the application:
 
