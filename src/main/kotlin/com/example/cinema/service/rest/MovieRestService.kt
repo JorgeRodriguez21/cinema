@@ -15,7 +15,7 @@ class MovieRestService @Autowired constructor(
     private val movieRepository: MovieRepository
 ) {
     companion object {
-        const val API_KEY = "e4f33820"
+        const val API_KEY = ""
     }
 
     private val baseUrl = "https://www.omdbapi.com/?apikey=$API_KEY&i="
