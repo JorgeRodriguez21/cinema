@@ -6,7 +6,7 @@ import com.example.cinema.persistence.model.Role
 import com.example.cinema.persistence.model.User
 import com.example.cinema.persistence.repository.MovieRepository
 import com.example.cinema.persistence.repository.UserRepository
-import com.example.cinema.service.MovieRestService
+import com.example.cinema.service.rest.MovieRestService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder

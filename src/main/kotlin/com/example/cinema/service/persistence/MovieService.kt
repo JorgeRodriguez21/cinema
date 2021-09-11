@@ -1,4 +1,4 @@
-package com.example.cinema.service
+package com.example.cinema.service.persistence
 
 import com.example.cinema.api.dto.MovieDto
 import com.example.cinema.api.request.MovieShowDeleteRequest
@@ -12,6 +12,7 @@ import com.example.cinema.persistence.repository.MovieRoomRepository
 import com.example.cinema.persistence.repository.RoomRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class MovieService @Autowired constructor(
@@ -45,5 +46,9 @@ class MovieService @Autowired constructor(
     fun deleteMovieShow(movieShowDeleteRequest: MovieShowDeleteRequest) {
         val movieRoomKey = MovieRoomKey(movieShowDeleteRequest.movieId, movieShowDeleteRequest.roomId)
         movieRoomRepository.deleteById(movieRoomKey)
+    }
+
+    fun getMovieById(id: Int): Optional<Movie> {
+        return movieRepository.findById(id)
     }
 }

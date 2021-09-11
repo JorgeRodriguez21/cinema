@@ -3,7 +3,7 @@ package com.example.cinema.api.controller
 import com.example.cinema.api.request.MovieShowDeleteRequest
 import com.example.cinema.api.request.MovieShowRequest
 import com.example.cinema.api.response.MovieResponse
-import com.example.cinema.service.MovieService
+import com.example.cinema.service.persistence.MovieService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder

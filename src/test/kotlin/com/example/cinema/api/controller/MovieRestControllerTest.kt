@@ -3,7 +3,8 @@ package com.example.cinema.api.controller
 import com.example.cinema.CinemaApplication
 import com.example.cinema.api.dto.MovieRestDto
 import com.example.cinema.security.SpringSecurityConfig
-import com.example.cinema.service.MovieRestService
+import com.example.cinema.service.application.MovieApplicationService
+import com.example.cinema.service.rest.MovieRestService
 import com.example.cinema.utils.TestMovieBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
@@ -34,7 +35,7 @@ internal class MovieRestControllerTest {
     lateinit var objectMapper: ObjectMapper
 
     @MockkBean
-    lateinit var service: MovieRestService
+    lateinit var service: MovieApplicationService
 
     @Test
     @WithMockUser(username = "user1", password = "pwd", authorities = ["USER"])

@@ -1,4 +1,4 @@
-package com.example.cinema.service
+package com.example.cinema.service.persistence
 
 import com.example.cinema.api.dto.MovieDto
 import com.example.cinema.api.request.MovieShowDeleteRequest
@@ -137,5 +137,37 @@ internal class MovieServiceTest {
 
         verify(exactly = 1) { movieRoomRepository.deleteById(movieRoomKey) }
 
+    }
+
+    @Test
+    fun `should call repository get a movie by id`() {
+        every { movieRepository.findById(1) }.returns(Optional.empty())
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
+
+        movieService.getMovieById(1)
+
+        verify(exactly = 1) { movieRepository.findById(1) }
+
+    }
+
+    @Test
+    fun `should return the result of the repository call`() {
+        every { movieRepository.findById(1) }.returns(Optional.empty())
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
+
+        val result = movieService.getMovieById(1)
+
+        assertThat(result).isEmpty
+    }
+
+    @Test
+    fun `should return the result of the repository call when optional is not empty`() {
+        val movieFromDatabase = Movie(1, "movie", "1234")
+        every { movieRepository.findById(1) }.returns(Optional.of(movieFromDatabase))
+        val movieService = MovieService(roomRepository, movieRepository, movieRoomRepository)
+
+        val result = movieService.getMovieById(1)
+
+        assertThat(result.get()).usingRecursiveComparison().isEqualTo(movieFromDatabase)
     }
 }

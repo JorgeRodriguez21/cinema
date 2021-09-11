@@ -7,7 +7,7 @@ import com.example.cinema.api.request.MovieShowRequest
 import com.example.cinema.api.response.MovieResponse
 import com.example.cinema.persistence.model.RoomType
 import com.example.cinema.security.SpringSecurityConfig
-import com.example.cinema.service.MovieService
+import com.example.cinema.service.persistence.MovieService
 import com.example.cinema.utils.TestMovieBuilder.buildMovie
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean

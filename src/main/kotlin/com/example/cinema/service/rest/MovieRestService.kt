@@ -1,4 +1,4 @@
-package com.example.cinema.service
+package com.example.cinema.service.rest
 
 import com.example.cinema.api.dto.MovieRestDto
 import com.example.cinema.persistence.repository.MovieRepository
@@ -18,7 +18,7 @@ class MovieRestService @Autowired constructor(
         const val API_KEY = ""
     }
 
-    private val baseUrl = "https://www.omdbapi.com/?apikey=${API_KEY}&i="
+    private val baseUrl = "https://www.omdbapi.com/?apikey=$API_KEY&i="
 
     fun getMovieById(id: String): MovieRestDto? {
         return restTemplate.getForObject("$baseUrl${id}", MovieRestDto::class.java)
@@ -49,13 +49,5 @@ class MovieRestService @Autowired constructor(
             }
         }
         return obtainedMovies;
-    }
-
-    fun getMovieDetails(id: Int): MovieRestDto {
-        val movie = movieRepository.findById(id).orElseThrow()
-        val movieRestDto = this.getMovieById(movie.imdbId) ?: throw NoSuchElementException()
-        movieRestDto.setComments(movie.reviews.toList())
-        movieRestDto.calculateReviewRate(movie.reviews.toList())
-        return movieRestDto
     }
 }
