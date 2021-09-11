@@ -7,7 +7,7 @@ import javax.persistence.*
 class Review(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
+    val id: Int?,
     val rate: Int,
     val comment: String,
     @ManyToOne()
@@ -17,6 +17,11 @@ class Review(
     @JoinColumn(name = "movie_id", nullable = false)
     val movie: Movie
 ) {
+
+    override fun toString(): String {
+        return "Review(id=$id, rate=$rate, comment='$comment')"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -31,13 +36,9 @@ class Review(
     }
 
     override fun hashCode(): Int {
-        var result = id
+        var result = id ?: 0
         result = 31 * result + rate
         result = 31 * result + comment.hashCode()
         return result
-    }
-
-    override fun toString(): String {
-        return "Review(id=$id, rate=$rate, comment='$comment')"
     }
 }
